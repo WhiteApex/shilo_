@@ -1,10 +1,10 @@
 {
   "platforms": {
-    "tg":  { "name": "telegram",  "dest": "https://t.me/yourchannel" },
-    "ig":  { "name": "instagram", "dest": "https://www.instagram.com/yourprofile/" },
-    "vk":  { "name": "vkontakte", "dest": "https://vk.com/yourgroup" },
-    "yt":  { "name": "youtube",   "dest": "https://www.youtube.com/@YourChannel" },
-    "site":{ "name": "website",   "dest": "https://yourdomain.com/" }
+    "tg":  { "name": "telegram",  "dest": "https://t.me/shilodevelopment" },
+    "ig":  { "name": "instagram", "dest": "https://www.instagram.com/shilo.development/" },
+    "vk":  { "name": "vkontakte", "dest": "https://vk.com/shilo.development" },
+    "yt":  { "name": "youtube",   "dest": "https://www.youtube.com/@shilo.development" },
+    "site":{ "name": "website",   "dest": "https://shilo.dev/" }
   },
   "placements": {
     "bio":     { "utm_medium": "bio" },
@@ -15,11 +15,11 @@
     "header":  { "utm_medium": "header" }
   },
   "labels": {
-    "tg":  "telegram",
-    "ig":  "instagram",
-    "vk":  "vkontakte",
-    "yt":  "youtube",
-    "site":"website"
+    "tg":   "telegram",
+    "ig":   "instagram",
+    "vk":   "vkontakte",
+    "yt":   "youtube",
+    "site": "website"
   },
   "defaults": {
     "utm_campaign": "brand"
