@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Redirecting…</title>
+<style>body{font:14px/1.5 system-ui,Segoe UI,Roboto,Arial;margin:24px}.muted{color:#666}</style>
+
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0];
+k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,"script",
+"https://mc.yandex.ru/metrika/tag.js","ym");
+ym(YOUR_COUNTER_ID,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,defer:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/YOUR_COUNTER_ID" style="position:absolute;left:-9999px" alt=""></div></noscript>
+
+<p><strong>Redirecting…</strong></p>
+<p class="muted">Если это окно видно дольше секунды — обновите страницу.</p>
+
+<script>
+(async function(){
+  function go(destUrl){
+    const MAX=300; let done=false;
+    const doIt=()=>{ if(done) return; done=true;
+      try{ const loc=new URL(location.href), d=new URL(destUrl);
+        const loop=(d.host===loc.host)&&d.pathname.split("/").includes("r");
+        if(!loop) location.replace(d.toString()); }catch{ location.href=destUrl; } };
+    setTimeout(doIt,MAX); return doIt;
+  }
+  try{
+    const loc=new URL(location.href);
+    const parts=loc.pathname.replace(/^\/+|\/+$/g,"").split("/");
+    const rIdx=parts.indexOf("r");
+
+    // поддержка обоих форматов:
+    // а) /r/<from>/<placement>/<to>
+    // б) /r/?from=...&placement=...&to=...
+    const fromPath=(rIdx>=0&&parts[rIdx+1])?decodeURIComponent(parts[rIdx+1]):null;
+    const plcPath=(rIdx>=0&&parts[rIdx+2])?decodeURIComponent(parts[rIdx+2]):null;
+    const toPath  =(rIdx>=0&&parts[rIdx+3])?decodeURIComponent(parts[rIdx+3]):null;
+
+    const qp=loc.searchParams;
+    const from=fromPath || qp.get("from");
+    const placement=plcPath || qp.get("placement");
+    const to=toPath || qp.get("to");
+    if(!from||!placement||!to) throw new Error("Use /r/<from>/<placement>/<to> or /r/?from=&placement=&to=");
+
+    const basePrefix=rIdx>0?"/"+parts.slice(0,rIdx).join("/"):"";
+    const resp=await fetch(basePrefix+"/r/routes.json?v=1",{cache:"no-store"});
+    if(!resp.ok) throw new Error("routes.json missing");
+    const cfg=await resp.json();
+
+    const fromPlat=cfg.platforms[from], toPlat=cfg.platforms[to], plc=cfg.placements[placement];
+    if(!fromPlat) throw new Error("Unknown from: "+from);
+    if(!toPlat) throw new Error("Unknown to: "+to);
+    if(!plc) throw new Error("Unknown placement: "+placement);
+
+    const toOverride=qp.get("to_url");
+    const dest=new URL(toOverride || toPlat.dest);
+
+    const utm_source  = qp.get("utm_source")   || (cfg.labels?.[from]||fromPlat.name||from);
+    const utm_medium  = qp.get("utm_medium")   || (plc.utm_medium||placement);
+    const utm_campaign= qp.get("utm_campaign") || (cfg.defaults?.utm_campaign||"");
+    const utm_content = qp.get("utm_content")  || "";
+    const utm_term    = qp.get("utm_term")     || "";
+
+    if(utm_source)  dest.searchParams.set("utm_source",utm_source);
+    if(utm_medium)  dest.searchParams.set("utm_medium",utm_medium);
+    if(utm_campaign)dest.searchParams.set("utm_campaign",utm_campaign);
+    if(utm_content) dest.searchParams.set("utm_content",utm_content);
+    if(utm_term)    dest.searchParams.set("utm_term",utm_term);
+
+    const params={slug_mode:"matrix",from_platform:from,to_platform:to,placement,
+      destination:dest.toString(),utm_source,utm_medium,utm_campaign,utm_content,utm_term,ts:Date.now()};
+
+    const redirectNow=go(dest.toString());
+    if(typeof ym==="function"){
+      ym(YOUR_COUNTER_ID,'reachGoal','redirect_click',params, redirectNow);
+      // ym(YOUR_COUNTER_ID,'params',params); // опционально
+    }
+  }catch(e){
+    console.error(e);
+    const m=document.querySelector(".muted");
+    if(m) m.textContent="Ошибка редиректа: "+(e&&e.message?e.message:e);
+  }
+})();
+</script>
+</html>
