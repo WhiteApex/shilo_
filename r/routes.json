@@ -1,0 +1,27 @@
+{
+  "platforms": {
+    "tg":  { "name": "telegram",  "dest": "https://t.me/yourchannel" },
+    "ig":  { "name": "instagram", "dest": "https://www.instagram.com/yourprofile/" },
+    "vk":  { "name": "vkontakte", "dest": "https://vk.com/yourgroup" },
+    "yt":  { "name": "youtube",   "dest": "https://www.youtube.com/@YourChannel" },
+    "site":{ "name": "website",   "dest": "https://yourdomain.com/" }
+  },
+  "placements": {
+    "bio":     { "utm_medium": "bio" },
+    "post":    { "utm_medium": "post" },
+    "story":   { "utm_medium": "story" },
+    "desc":    { "utm_medium": "description" },
+    "comment": { "utm_medium": "comment" },
+    "header":  { "utm_medium": "header" }
+  },
+  "labels": {
+    "tg":  "telegram",
+    "ig":  "instagram",
+    "vk":  "vkontakte",
+    "yt":  "youtube",
+    "site":"website"
+  },
+  "defaults": {
+    "utm_campaign": "brand"
+  }
+}
